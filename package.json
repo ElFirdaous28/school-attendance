@@ -1,0 +1,28 @@
+{
+    "name": "my-project",
+    "private": true,
+    "workspaces": [
+        "shared",
+        "backend",
+        "frontend"
+    ],
+    "scripts": {
+        "dev:back": "npm run dev -w backend",
+        "dev:front": "npm run dev -w frontend"
+    },
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ElFirdaous28/school-attendance.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "bugs": {
+        "url": "https://github.com/ElFirdaous28/school-attendance/issues"
+    },
+    "homepage": "https://github.com/ElFirdaous28/school-attendance#readme"
+}
