@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "strict": true,
+        "composite": true,
+        "baseUrl": ".",
+        "paths": {
+            "@school/shared": [
+                "./shared/src/index.ts"
+            ]
+        }
+    }
+}
