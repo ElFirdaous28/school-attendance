@@ -1,0 +1,209 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// This is your Prisma schema file
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  TEACHER
+  ADMIN
+  STUDENT
+  PARENT
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  EXCUSED
+}
+
+enum SessionStatus {
+  DRAFT
+  VALIDATED
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  ENROLLED_LATE
+  DROPPED
+  COMPLETED
+}
+
+enum ClassStatus {
+  ACTIVE
+  FINISHED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  role      UserRole
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  teacher  Teacher?
+  admin    Admin?
+  student  Student?
+  guardian Guardian?
+
+  @@map("users")
+}
+
+model Admin {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("admins")
+}
+
+model Teacher {
+  id             String @id @default(uuid())
+  userId         String @unique
+  specialization String
+  user           User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relations
+  sessions Session[]
+
+  @@map("teachers")
+}
+
+model Guardian {
+  id          String @id @default(uuid())
+  userId      String @unique
+  phoneNumber String
+  address     String
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relations
+  students GuardianStudent[]
+
+  @@map("guardians")
+}
+
+model Student {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  studentNumber String   @unique
+  dateOfBirth   DateTime
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relations
+  guardians   GuardianStudent[]
+  enrollments StudentClass[]
+  attendances Attendance[]
+
+  @@map("students")
+}
+
+model GuardianStudent {
+  id           String  @id @default(uuid())
+  guardianId   String
+  studentId    String
+  relationType String
+  isPrimary    Boolean @default(false)
+
+  guardian Guardian @relation(fields: [guardianId], references: [id], onDelete: Cascade)
+  student  Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([guardianId, studentId])
+  @@map("guardian_students")
+}
+
+model Subject {
+  id          String  @id @default(uuid())
+  name        String
+  code        String  @unique
+  description String?
+
+  // Relations
+  classes Class[]
+
+  @@map("subjects")
+}
+
+model Class {
+  id        String      @id @default(uuid())
+  name      String
+  level     String
+  capacity  Int
+  startDate DateTime
+  endDate   DateTime?
+  status    ClassStatus @default(ACTIVE)
+  subjectId String
+
+  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Restrict)
+
+  // Relations
+  students StudentClass[]
+  sessions Session[]
+
+  @@map("classes")
+}
+
+model StudentClass {
+  id            String           @id @default(uuid())
+  studentId     String
+  classId       String
+  enrolledAt    DateTime         @default(now())
+  enrollmentEnd DateTime?
+  status        EnrollmentStatus @default(ACTIVE)
+  notes         String?
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  class   Class   @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, classId])
+  @@map("student_classes")
+}
+
+model Session {
+  id        String        @id @default(uuid())
+  classId   String
+  teacherId String
+  date      DateTime
+  startTime DateTime
+  endTime   DateTime
+  status    SessionStatus @default(DRAFT)
+
+  class   Class   @relation(fields: [classId], references: [id], onDelete: Cascade)
+  teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Restrict)
+
+  // Relations
+  attendances Attendance[]
+
+  @@map("sessions")
+}
+
+model Attendance {
+  id        String           @id @default(uuid())
+  sessionId String
+  studentId String
+  status    AttendanceStatus @default(PRESENT)
+  notes     String?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, studentId])
+  @@map("attendances")
+}
