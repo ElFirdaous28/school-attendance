@@ -31,6 +31,8 @@ CREATE TABLE "users" (
 CREATE TABLE "admins" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "admins_pkey" PRIMARY KEY ("id")
 );
@@ -39,7 +41,9 @@ CREATE TABLE "admins" (
 CREATE TABLE "teachers" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "specialization" TEXT NOT NULL,
+    "specialization" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "teachers_pkey" PRIMARY KEY ("id")
 );
@@ -48,8 +52,10 @@ CREATE TABLE "teachers" (
 CREATE TABLE "guardians" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "phoneNumber" TEXT NOT NULL,
-    "address" TEXT NOT NULL,
+    "phoneNumber" TEXT,
+    "address" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "guardians_pkey" PRIMARY KEY ("id")
 );
@@ -60,6 +66,8 @@ CREATE TABLE "students" (
     "userId" TEXT NOT NULL,
     "studentNumber" TEXT NOT NULL,
     "dateOfBirth" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "students_pkey" PRIMARY KEY ("id")
 );
@@ -71,6 +79,8 @@ CREATE TABLE "guardian_students" (
     "studentId" TEXT NOT NULL,
     "relationType" TEXT NOT NULL,
     "isPrimary" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "guardian_students_pkey" PRIMARY KEY ("id")
 );
@@ -81,6 +91,8 @@ CREATE TABLE "subjects" (
     "name" TEXT NOT NULL,
     "code" TEXT NOT NULL,
     "description" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "subjects_pkey" PRIMARY KEY ("id")
 );
@@ -95,6 +107,8 @@ CREATE TABLE "classes" (
     "endDate" TIMESTAMP(3),
     "status" "ClassStatus" NOT NULL DEFAULT 'ACTIVE',
     "subjectId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "classes_pkey" PRIMARY KEY ("id")
 );
@@ -108,6 +122,8 @@ CREATE TABLE "student_classes" (
     "enrollmentEnd" TIMESTAMP(3),
     "status" "EnrollmentStatus" NOT NULL DEFAULT 'ACTIVE',
     "notes" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "student_classes_pkey" PRIMARY KEY ("id")
 );
@@ -121,6 +137,8 @@ CREATE TABLE "sessions" (
     "startTime" TIMESTAMP(3) NOT NULL,
     "endTime" TIMESTAMP(3) NOT NULL,
     "status" "SessionStatus" NOT NULL DEFAULT 'DRAFT',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "sessions_pkey" PRIMARY KEY ("id")
 );

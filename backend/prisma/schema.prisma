@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 // This is your Prisma schema file
 // Learn more: https://pris.ly/d/prisma-schema
 
@@ -66,18 +60,24 @@ model User {
 }
 
 model Admin {
-  id     String @id @default(uuid())
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("admins")
 }
 
 model Teacher {
-  id             String @id @default(uuid())
-  userId         String @unique
-  specialization String
-  user           User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  specialization String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Relations
   sessions Session[]
@@ -86,11 +86,14 @@ model Teacher {
 }
 
 model Guardian {
-  id          String @id @default(uuid())
-  userId      String @unique
-  phoneNumber String
-  address     String
-  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  phoneNumber String?
+  address     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Relations
   students GuardianStudent[]
@@ -103,7 +106,10 @@ model Student {
   userId        String   @unique
   studentNumber String   @unique
   dateOfBirth   DateTime
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Relations
   guardians   GuardianStudent[]
@@ -114,11 +120,13 @@ model Student {
 }
 
 model GuardianStudent {
-  id           String  @id @default(uuid())
+  id           String   @id @default(uuid())
   guardianId   String
   studentId    String
   relationType String
-  isPrimary    Boolean @default(false)
+  isPrimary    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   guardian Guardian @relation(fields: [guardianId], references: [id], onDelete: Cascade)
   student  Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
@@ -128,10 +136,12 @@ model GuardianStudent {
 }
 
 model Subject {
-  id          String  @id @default(uuid())
+  id          String   @id @default(uuid())
   name        String
-  code        String  @unique
+  code        String   @unique
   description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // Relations
   classes Class[]
@@ -148,6 +158,8 @@ model Class {
   endDate   DateTime?
   status    ClassStatus @default(ACTIVE)
   subjectId String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 
   subject Subject @relation(fields: [subjectId], references: [id], onDelete: Restrict)
 
@@ -166,6 +178,8 @@ model StudentClass {
   enrollmentEnd DateTime?
   status        EnrollmentStatus @default(ACTIVE)
   notes         String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
 
   student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
   class   Class   @relation(fields: [classId], references: [id], onDelete: Cascade)
@@ -182,6 +196,8 @@ model Session {
   startTime DateTime
   endTime   DateTime
   status    SessionStatus @default(DRAFT)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 
   class   Class   @relation(fields: [classId], references: [id], onDelete: Cascade)
   teacher Teacher @relation(fields: [teacherId], references: [id], onDelete: Restrict)
