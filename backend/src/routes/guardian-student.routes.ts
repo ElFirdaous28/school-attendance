@@ -12,5 +12,7 @@ router.post("/", validate(createGuardianStudentSchema), GuardianStudentControlle
 router.get("/", GuardianStudentController.getAll);
 router.get("/:id", GuardianStudentController.getById);
 router.delete("/:id", GuardianStudentController.delete);
+router.get("/student/:studentId", GuardianStudentController.getGuardiansForStudent);
+router.get("/guardian/:guardianId", GuardianStudentController.getStudentsForGuardian);
 
 export default router;

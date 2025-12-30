@@ -45,4 +45,34 @@ export const GuardianStudentController = {
             next(error);
         }
     },
+
+    // get guardians for a specific student
+    async getGuardiansForStudent(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { studentId } = req.params;
+            const guardians = await prisma.guardianStudent.findMany({
+                where: { studentId },
+                // get guardian with user details
+                include: { guardian: { include: { user: true } } },
+            });
+            res.status(200).json({ guardians, message: `Guardians retrieved for student ${studentId}` });
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    // get students for a specific guardian
+    async getStudentsForGuardian(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { guardianId } = req.params;
+            const students = await prisma.guardianStudent.findMany({
+                where: { guardianId },
+                // get student with user details
+                include: { student: { include: { user: true } }, },
+            });
+            res.status(200).json({ students, message: `Students retrieved for guardian ${guardianId}` });
+        } catch (error) {
+            next(error);
+        }
+    },
 };

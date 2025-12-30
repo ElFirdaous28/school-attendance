@@ -7,6 +7,9 @@ import userRoutes from "./routes/user.routes.js";
 import guardianStudentRoutes from "./routes/guardian-student.routes.js";
 import classRoutes from "./routes/class.routes.js";
 import subjectRoutes from "./routes/subject.routes.js";
+import studentClassRoutes from "./routes/student-class.routes.js";
+import sessionRoutes from "./routes/session.routes.js";
+import attendanceRoutes from "./routes/attendance.routes.js";
 
 const app = express();
 
@@ -31,6 +34,9 @@ app.use("/api/users", userRoutes);
 app.use("/api/guardian-students", guardianStudentRoutes);
 app.use("/api/classes", classRoutes);
 app.use("/api/subjects", subjectRoutes);
+app.use("/api/student-classes", studentClassRoutes);
+app.use("/api/sessions", sessionRoutes);
+app.use("/api/attendances", attendanceRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
