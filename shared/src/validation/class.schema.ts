@@ -8,7 +8,6 @@ export const createClassSchema = z.object({
     startDate: z.coerce.date(),
     endDate: z.coerce.date().optional(),
     status: z.nativeEnum(ClassStatus).default(ClassStatus.ACTIVE),
-    subjectId: z.string().uuid("Invalid subject ID"),
 }).strict();
 
 export const updateClassSchema = z.object({
@@ -18,5 +17,4 @@ export const updateClassSchema = z.object({
     startDate: z.coerce.date().optional(),
     endDate: z.coerce.date().optional(),
     status: z.nativeEnum(ClassStatus).optional(),
-    subjectId: z.string().uuid("Invalid subject ID").optional(),
 }).strict();
