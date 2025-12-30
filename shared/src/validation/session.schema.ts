@@ -14,8 +14,8 @@ export const createSessionSchema = z.object({
 }).strict();
 
 export const updateSessionSchema = z.object({
-    classId: z.string().uuid("Invalid class ID").optional(),
-    teacherId: z.string().uuid("Invalid teacher ID").optional(),
+    // classId: z.string().uuid("Invalid class ID").optional(),
+    // teacherId: z.string().uuid("Invalid teacher ID").optional(),
     date: z.coerce.date().optional(),
     startTime: z.coerce.date().optional(),
     endTime: z.coerce.date().optional(),
