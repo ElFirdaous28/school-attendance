@@ -5,11 +5,25 @@
         "moduleResolution": "NodeNext",
         "strict": true,
         "composite": true,
+        "declaration": true,
+        "declarationMap": true,
         "baseUrl": ".",
         "paths": {
             "@school/shared": [
                 "./shared/src/index.ts"
             ]
         }
-    }
+    },
+    "files": [],
+    "references": [
+        {
+            "path": "./shared"
+        },
+        {
+            "path": "./backend"
+        },
+        {
+            "path": "./frontend"
+        }
+    ]
 }

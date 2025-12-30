@@ -11,7 +11,7 @@ export const createSessionSchema = z.object({
 }).refine((data) => data.endTime > data.startTime, {
     message: "End time must be after start time",
     path: ["endTime"],
-});
+}).strict();
 
 export const updateSessionSchema = z.object({
     classId: z.string().uuid("Invalid class ID").optional(),
@@ -20,4 +20,4 @@ export const updateSessionSchema = z.object({
     startTime: z.coerce.date().optional(),
     endTime: z.coerce.date().optional(),
     status: z.nativeEnum(SessionStatus).optional(),
-});
+}).strict();

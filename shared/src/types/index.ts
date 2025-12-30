@@ -1,11 +1,13 @@
-export * from './user.type';
-export * from './admin.type';
-export * from './teacher.type';
-export * from './student.type';
-export * from './guardian.type';
-export * from './guardian-student.type';
-export * from './subject.type';
-export * from './class.type';
-export * from './student-class.type';
-export * from './session.type';
-export * from './attendance.type';
+export type {
+    User,
+    Teacher,
+    Guardian,
+    Student,
+    GuardianStudent,
+    Subject,
+    Class,
+    StudentClass,
+    Session,
+    Attendance,
+    RefreshToken,
+} from '@prisma/client';

@@ -1,6 +1,0 @@
-export enum EnrollmentStatus {
-  ACTIVE = 'ACTIVE',
-  ENROLLED_LATE = 'ENROLLED_LATE',
-  DROPPED = 'DROPPED',
-  COMPLETED = 'COMPLETED'
-}

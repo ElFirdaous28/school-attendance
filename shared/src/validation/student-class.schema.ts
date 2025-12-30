@@ -7,10 +7,10 @@ export const createStudentClassSchema = z.object({
     enrollmentEnd: z.coerce.date().optional(),
     status: z.nativeEnum(EnrollmentStatus).default(EnrollmentStatus.ACTIVE),
     notes: z.string().optional(),
-});
+}).strict();
 
 export const updateStudentClassSchema = z.object({
     enrollmentEnd: z.coerce.date().optional(),
     status: z.nativeEnum(EnrollmentStatus).optional(),
     notes: z.string().optional(),
-});
+}).strict();

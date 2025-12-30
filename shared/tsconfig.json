@@ -4,5 +4,9 @@
     "rootDir": "./src",
     "outDir": "./dist"
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*",
+    "src/types/express.d.ts",
+    "../shared/src/types/**/*.d.ts"
+  ]
 }
