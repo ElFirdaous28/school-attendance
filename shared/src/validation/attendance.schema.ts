@@ -6,9 +6,9 @@ export const createAttendanceSchema = z.object({
     studentId: z.string().uuid("Invalid student ID"),
     status: z.nativeEnum(AttendanceStatus).default(AttendanceStatus.PRESENT),
     notes: z.string().optional(),
-});
+}).strict();
 
 export const updateAttendanceSchema = z.object({
     status: z.nativeEnum(AttendanceStatus).optional(),
     notes: z.string().optional(),
-});
+}).strict();
