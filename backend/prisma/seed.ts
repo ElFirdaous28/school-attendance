@@ -1,33 +1,51 @@
+// prisma/seed.ts
 import 'dotenv/config';
 import { prisma } from '../src/config/db.ts';
 import { UserRole } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 async function main() {
-  const adminEmail = process.env.ADMIN_EMAIL || 'admin@gmail.com';
+  const password = 'password123';
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-  const existingAdmin = await prisma.user.findUnique({
-    where: { email: adminEmail },
-  });
-
-  if (existingAdmin) {
-    console.log('Admin already exists:', existingAdmin.email);
-    process.exit(0); // Not an error, script can exit normally
-  }
-
-  const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD || 'password', 10);
-
-  const admin = await prisma.user.create({
-    data: {
+  const users = [
+    {
       firstName: 'Admin',
       lastName: 'User',
-      email: adminEmail,
-      password: hashedPassword,
+      email: process.env.ADMIN_EMAIL || 'admin@gmail.com',
       role: UserRole.ADMIN,
     },
-  });
+    {
+      firstName: 'Teacher',
+      lastName: 'User',
+      email: process.env.TEACHER_EMAIL || 'teacher@gmail.com',
+      role: UserRole.TEACHER,
+    },
+    {
+      firstName: 'Student',
+      lastName: 'User',
+      email: process.env.STUDENT_EMAIL || 'student@gmail.com',
+      role: UserRole.STUDENT,
+    },
+    {
+      firstName: 'Guardian',
+      lastName: 'User',
+      email: process.env.GUARDIAN_EMAIL || 'guardian@gmail.com',
+      role: UserRole.GUARDIAN,
+    },
+  ];
 
-  console.log('Admin created:', admin.email);
+  for (const u of users) {
+    const user = await prisma.user.upsert({
+      where: { email: u.email },
+      update: {},
+      create: {
+        ...u,
+        password: hashedPassword,
+      },
+    });
+    console.log(`${u.role} created or already exists:`, user.email);
+  }
 }
 
 main()
