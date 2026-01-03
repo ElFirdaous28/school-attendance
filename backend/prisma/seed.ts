@@ -5,7 +5,7 @@ import { UserRole } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 async function main() {
-  const password = 'password123';
+  const password = 'password';
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const users = [

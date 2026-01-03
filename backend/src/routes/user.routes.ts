@@ -8,7 +8,7 @@ import { UserRole } from '@prisma/client';
 
 const router = express.Router();
 
-router.get('/profile', authenticate, authorizeRoles(UserRole.TEACHER), UserController.profile);
+router.get('/profile', authenticate, UserController.profile);
 router.post('/', validate(createUserSchema), UserController.createUser);
 
 router.get('/', UserController.getAllUsers);
