@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import authRoutes from "./routes/auth.routes.js";
 import errorHandler from "./middleware/error-handler.js";
 import notFound from "./middleware/not-found.js";
@@ -10,12 +11,34 @@ import subjectRoutes from "./routes/subject.routes.js";
 import studentClassRoutes from "./routes/student-class.routes.js";
 import sessionRoutes from "./routes/session.routes.js";
 import attendanceRoutes from "./routes/attendance.routes.js";
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
 // checkDbConnection();
 
 app.use(express.json());
+app.use(cookieParser());
+
+// CORS configuration
+const allowedOrigins = [
+    'http://localhost:5173',
+    'https://e-market-frontend-2-mkod.vercel.app',
+];
+
+app.use(
+    cors({
+        origin: function (origin, callback) {
+            if (!origin) return callback(null, true);
+            if (allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
+        credentials: true,
+    })
+);
 
 app.get("/", async (_req, res) => {
     res.json({ message: "API running 🚀" });
