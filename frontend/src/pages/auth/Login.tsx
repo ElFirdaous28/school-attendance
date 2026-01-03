@@ -40,8 +40,8 @@ const Login = () => {
                 case 'STUDENT':
                     navigate('/student/attendance', { replace: true });
                     break;
-                case 'PARENT':
-                    navigate('/parent/dashboard', { replace: true });
+                case 'GUARDIAN':
+                    navigate('/guardian/dashboard', { replace: true });
                     break;
                 default:
                     navigate('/', { replace: true });
