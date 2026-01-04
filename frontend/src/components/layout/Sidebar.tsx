@@ -33,7 +33,7 @@ function Sidebar({ mobileMenuOpen, setMobileMenuOpen }: { mobileMenuOpen: boolea
 
       // Attendance
       { title: 'Sessions', path: '/admin/sessions', icon: CalendarDays },
-      // { title: 'Attendance', path: '/admin/attendance', icon: ClipboardCheck },
+      { title: 'Attendance', path: '/admin/attendance', icon: ClipboardCheck },
 
       // Reports
       { title: 'Reports', path: '/admin/reports', icon: BarChart3 },
