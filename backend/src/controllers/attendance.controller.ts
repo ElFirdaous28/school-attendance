@@ -37,7 +37,21 @@ export const AttendanceController = {
 
             const attendances = await prisma.attendance.findMany({
                 where: { studentId },
-                include: { session: true },
+                include: {
+                    session: {
+                        include: {
+                            class: true,   // include class info
+                            teacher: {
+                                include: {
+                                    user: true, // include teacher's user info
+                                },
+                            },
+                        },
+                    },
+                },
+                orderBy: {
+                    createdAt: 'desc', // optional: newest first
+                },
             });
 
             res.status(200).json({ attendances });
