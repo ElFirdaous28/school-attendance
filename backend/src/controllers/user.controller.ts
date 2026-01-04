@@ -23,9 +23,9 @@ export const UserController = {
 
     async createUser(req: Request, res: Response, next: NextFunction) {
         try {
-            const { firstName, lastName, email, password, role, ...rest } = req.body;
+            const { firstName, lastName, email, role, ...rest } = req.body;
 
-            const hashedPassword = await bcrypt.hash(password, 10);
+            const hashedPassword = await bcrypt.hash("password", 10);
 
             const result = await prisma.$transaction(async (tx) => {
                 const newUser = await tx.user.create({
@@ -156,24 +156,44 @@ export const UserController = {
             const limit = parseInt(req.query.limit as string) || 10;
             const skip = (page - 1) * limit;
 
+            // Optional search and filter
+            const search = (req.query.search as string)?.trim(); // search by name or email
+            const role = (req.query.role as string)?.toUpperCase(); // filter by role
+
+            const where: any = {};
+
+            if (search) {
+                where.OR = [
+                    { firstName: { contains: search, mode: 'insensitive' } },
+                    { lastName: { contains: search, mode: 'insensitive' } },
+                    { email: { contains: search, mode: 'insensitive' } },
+                ];
+            }
+
+            if (role && ['ADMIN', 'TEACHER', 'STUDENT', 'GUARDIAN'].includes(role)) {
+                where.role = role;
+            }
+
             const [users, total] = await Promise.all([
                 prisma.user.findMany({
                     skip,
                     take: limit,
-                    select: userSelect
+                    where,
+                    select: userSelect,
+                    orderBy: { createdAt: 'desc' }, // optional: newest first
                 }),
-                prisma.user.count()
+                prisma.user.count({ where }),
             ]);
 
             res.status(200).json({
                 message: "Users retrieved successfully",
-                users: users,
+                users,
                 pagination: {
                     total,
                     page,
                     limit,
-                    totalPages: Math.ceil(total / limit)
-                }
+                    totalPages: Math.ceil(total / limit),
+                },
             });
         } catch (error) {
             next(error);

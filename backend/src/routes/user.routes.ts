@@ -8,12 +8,13 @@ import { UserRole } from '@prisma/client';
 
 const router = express.Router();
 
-router.get('/profile', authenticate, UserController.profile);
-router.post('/', validate(createUserSchema), UserController.createUser);
+router.use(authenticate);
+router.get('/profile', UserController.profile);
+router.post('/', authorizeRoles(UserRole.ADMIN), validate(createUserSchema), UserController.createUser);
 
-router.get('/', UserController.getAllUsers);
-router.get('/:id', UserController.getUserById);
-router.put('/:id', validate(updateUserSchema), UserController.updateUser);
+router.get('/', authorizeRoles(UserRole.ADMIN), UserController.getAllUsers);
+router.get('/:id', authorizeRoles(UserRole.ADMIN), UserController.getUserById);
+router.put('/:id', authorizeRoles(UserRole.ADMIN), validate(updateUserSchema), UserController.updateUser);
 
 
 router.delete('/:id', UserController.deleteUser);

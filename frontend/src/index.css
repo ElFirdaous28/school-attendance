@@ -1,8 +1,11 @@
 @import 'tailwindcss';
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 /* =========================
    Light theme only
-   ========================= */
+========================= */
 :root {
   /* Brand */
   --color-primary: #7063ba;
@@ -27,11 +30,55 @@
   --color-absent: #dc2626;
   --color-late: #f59e0b;
   --color-excused: #6b7280;
+
+  /* Radius */
+  --radius: 0.625rem;
+
+  /* Shadcn variables (mapped to your palette) */
+  --background: var(--color-background);
+  --foreground: var(--color-textMain);
+  --card: var(--color-surface);
+  --card-foreground: var(--color-textMain);
+  --popover: var(--color-surface);
+  --popover-foreground: var(--color-textMain);
+
+  --primary: var(--color-primary);
+  --primary-foreground: var(--color-background);
+
+  --secondary: var(--color-secondary);
+  --secondary-foreground: var(--color-background);
+
+  --muted: var(--color-textMuted);
+  --muted-foreground: var(--color-textMain);
+
+  --accent: var(--color-secondary);
+  --accent-foreground: var(--color-background);
+
+  --destructive: var(--color-absent);
+  --border: var(--color-border);
+  --input: var(--color-surface);
+  --ring: var(--color-primary);
+
+  /* Charts & Sidebar can stay defaults or adjust later */
+  --chart-1: #6466f1;
+  --chart-2: #f19f3c;
+  --chart-3: #f25c5c;
+  --chart-4: #6b7280;
+  --chart-5: #22c55e;
+
+  --sidebar: var(--color-surface);
+  --sidebar-foreground: var(--color-textMain);
+  --sidebar-primary: var(--color-primary);
+  --sidebar-primary-foreground: var(--color-background);
+  --sidebar-accent: var(--color-secondary);
+  --sidebar-accent-foreground: var(--color-background);
+  --sidebar-border: var(--color-border);
+  --sidebar-ring: var(--color-primary);
 }
 
 /* =========================
    Register Tailwind colors
-   ========================= */
+========================= */
 @theme {
   --color-primary: var(--color-primary);
   --color-primaryHover: var(--color-primaryHover);
@@ -55,10 +102,95 @@
 
 /* =========================
    Base styles
-   ========================= */
+========================= */
 @layer base {
   body {
     background-color: var(--color-background);
     color: var(--color-textMain);
+  }
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+.dark {
+  --background: #1c1c1e;
+  --foreground: #f1f1f1;
+  --card: #2c2c2e;
+  --card-foreground: #f1f1f1;
+  --popover: #2c2c2e;
+  --popover-foreground: #f1f1f1;
+  --primary: #7063ba;
+  --primary-foreground: #fefeff;
+  --secondary: #d977a6;
+  --secondary-foreground: #fefeff;
+  --muted: #aeacaf;
+  --muted-foreground: #f1f1f1;
+  --accent: #d977a6;
+  --accent-foreground: #fefeff;
+  --destructive: #dc2626;
+  --border: #3a3a3c;
+  --input: #2c2c2e;
+  --ring: #7063ba;
+  --chart-1: #6466f1;
+  --chart-2: #f19f3c;
+  --chart-3: #f25c5c;
+  --chart-4: #6b7280;
+  --chart-5: #22c55e;
+  --sidebar: #2c2c2e;
+  --sidebar-foreground: #f1f1f1;
+  --sidebar-primary: #7063ba;
+  --sidebar-primary-foreground: #fefeff;
+  --sidebar-accent: #d977a6;
+  --sidebar-accent-foreground: #fefeff;
+  --sidebar-border: #3a3a3c;
+  --sidebar-ring: #7063ba;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }

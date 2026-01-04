@@ -4,6 +4,8 @@ import { lazy, Suspense } from 'react';
 import Test from '../pages/app/Test';
 import PublicRoute from './PublicRoute';
 import AdminDashboard from '../pages/admin/Dashboard';
+import Users from '../pages/admin/Users';
+import ProtectedRoute from './ProtectedRoute';
 
 // Lazy load pages
 const Layout = lazy(() => import('../layout/Layout'));
@@ -25,7 +27,10 @@ const AppRoutes = () => {
           <Route path="/" element={<Layout />}>
             <Route path='/test' element={<Test />} />
             {/*admin routes  */}
-            <Route path='/admin/dashboard' element={<AdminDashboard />} />
+            <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
+              <Route path='/admin/dashboard' element={<AdminDashboard />} />
+              <Route path='/admin/users' element={<Users />} />
+            </Route>
           </Route>
 
 
