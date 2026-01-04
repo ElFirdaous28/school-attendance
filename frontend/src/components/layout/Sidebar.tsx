@@ -29,7 +29,7 @@ function Sidebar({ mobileMenuOpen, setMobileMenuOpen }: { mobileMenuOpen: boolea
 
       // School referential
       { title: 'Classes', path: '/admin/classes', icon: GraduationCap },
-      { title: 'Students', path: '/admin/students', icon: Users },
+      { title: 'Users', path: '/admin/users', icon: Users },
       { title: 'Subjects', path: '/admin/subjects', icon: BookOpen },
 
       // Attendance
@@ -119,7 +119,7 @@ function Sidebar({ mobileMenuOpen, setMobileMenuOpen }: { mobileMenuOpen: boolea
                   <Link
                     key={path}
                     to={path}
-                    className={`flex items-center gap-3 px-3 py-3 rounded-lg text-gray-200 ${isActive ? 'bg-secondary [text-shadow:0_0_2px_rgba(0,0,0,0.8)]' : 'hover:bg-secondary hover:text-white'}`}>
+                    className={`flex items-center gap-3 px-3 py-3 rounded-lg text-gray-200 ${isActive ? 'bg-secondary' : 'hover:bg-secondaryHover hover:text-white'}`}>
                     <Icon className="w-5 h-5 min-w-5" />
                     <span
                       className={`transition-opacity duration-200 ${isExpanded ? 'opacity-100' : 'opacity-0 w-0 hidden'}`}>
