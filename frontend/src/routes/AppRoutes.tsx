@@ -4,6 +4,7 @@ import { lazy, Suspense } from 'react';
 import PublicRoute from './PublicRoute';
 import AdminDashboard from '../pages/admin/Dashboard';
 import ProtectedRoute from './ProtectedRoute';
+import ClassEnrollments from '@/pages/admin/ClassEnrollments';
 
 // Lazy load pages
 const Layout = lazy(() => import('../layout/Layout'));
@@ -34,6 +35,7 @@ const AppRoutes = () => {
               <Route path='/admin/classes' element={<Classes />} />
               <Route path='/admin/subjects' element={<Subjects />} />
               <Route path='/admin/sessions' element={<Sessions />} />
+              <Route path='/admin/class-enrollments/:classId' element={<ClassEnrollments />} />
             </Route>
           </Route>
 
