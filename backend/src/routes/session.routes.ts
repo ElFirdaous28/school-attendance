@@ -10,5 +10,6 @@ router.put('/:id', validate(updateSessionSchema), SessionController.updateSessio
 router.get('/', SessionController.getSessions);
 router.get('/:id', SessionController.getSessionById);
 router.delete('/:id', SessionController.deleteSession);
+router.put('/validate/:id', SessionController.validateSession);
 
 export default router;

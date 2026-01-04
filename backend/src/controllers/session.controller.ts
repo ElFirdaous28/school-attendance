@@ -88,7 +88,7 @@ export const SessionController = {
             next(error);
         }
     },
-    
+
     async getSessionById(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
@@ -113,6 +113,24 @@ export const SessionController = {
             await prisma.session.delete({ where: { id } });
             res.status(200).json({ message: 'Session deleted successfully' });
         } catch (error) {
+            next(error);
+        }
+    },
+
+    // set session status to VALIDATED
+    async validateSession(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+            const updatedSession = await prisma.session.update({
+                where: { id },
+                data: { status: 'VALIDATED' },
+            });
+            res.status(200).json({
+                message: 'Session validated successfully',
+                session: updatedSession,
+            });
+        }
+        catch (error) {
             next(error);
         }
     },

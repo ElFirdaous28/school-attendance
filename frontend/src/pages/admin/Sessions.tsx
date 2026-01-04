@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Edit2, Trash2, Plus, Calendar, Clock } from 'lucide-react';
+import { Search, Edit2, Trash2, Plus, Calendar, Clock, ClipboardCheck } from 'lucide-react';
 import { useAxios } from '../../hooks/useAxios';
 import { ConfirmDialog } from '@/components/app/ConfirmDialog';
 import { toast } from 'react-toastify';
 import SessionModal from '@/components/modals/SessionModal';
+import { useNavigate } from 'react-router-dom';
 
 const SessionsManagementPage: React.FC = () => {
     const axios = useAxios();
@@ -14,6 +15,7 @@ const SessionsManagementPage: React.FC = () => {
     const [statusFilter, setStatusFilter] = useState('');
     const [selectedSession, setSelectedSession] = useState<any | null>(null);
     const [modalOpen, setModalOpen] = useState(false);
+    const navigate = useNavigate();
 
     const fetchSessions = async () => {
         setLoading(true);
@@ -105,11 +107,42 @@ const SessionsManagementPage: React.FC = () => {
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <div className="flex justify-end gap-2">
-                                            <button onClick={() => { setSelectedSession(session); setModalOpen(true); }} className="p-2 text-primary hover:bg-primary/10 rounded-lg"><Edit2 size={18} /></button>
-                                            <ConfirmDialog title="Delete Class?" trigger={<button className="p-2 text-red-500 hover:bg-red-50 rounded-lg"><Trash2 size={18} /></button>}
-                                                onConfirm={() => axios.delete(`/sessions/${session.id}`).then(fetchSessions)} />
+
+                                            {/* Attendance */}
+                                            <button
+                                                onClick={() => navigate(`/admin/attendance/${session.id}`)}
+                                                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                                                title="View Attendance"
+                                            >
+                                                <ClipboardCheck size={18} />
+                                            </button>
+
+                                            {/* Edit */}
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedSession(session);
+                                                    setModalOpen(true);
+                                                }}
+                                                className="p-2 text-primary hover:bg-primary/10 rounded-lg"
+                                            >
+                                                <Edit2 size={18} />
+                                            </button>
+
+                                            {/* Delete */}
+                                            <ConfirmDialog
+                                                title="Delete Session?"
+                                                trigger={
+                                                    <button className="p-2 text-red-500 hover:bg-red-50 rounded-lg">
+                                                        <Trash2 size={18} />
+                                                    </button>
+                                                }
+                                                onConfirm={() =>
+                                                    axios.delete(`/sessions/${session.id}`).then(fetchSessions)
+                                                }
+                                            />
                                         </div>
                                     </td>
+
                                 </tr>
                             ))}
                         </tbody>
