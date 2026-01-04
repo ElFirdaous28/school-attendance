@@ -5,6 +5,7 @@ import { ConfirmDialog } from '@/components/app/ConfirmDialog';
 import { toast } from 'react-toastify';
 import SessionModal from '@/components/modals/SessionModal';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 
 const SessionsManagementPage: React.FC = () => {
     const axios = useAxios();
@@ -16,22 +17,28 @@ const SessionsManagementPage: React.FC = () => {
     const [selectedSession, setSelectedSession] = useState<any | null>(null);
     const [modalOpen, setModalOpen] = useState(false);
     const navigate = useNavigate();
+    const user = useAuth();
 
     const fetchSessions = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('/sessions', {
-                params: {
-                    page: pagination.page,
-                    limit: pagination.limit,
-                    search: searchInput,
-                    status: statusFilter
-                }
-            });
+            const params: any = {
+                page: pagination.page,
+                limit: pagination.limit,
+                search: searchInput,
+                status: statusFilter,
+            };
+
+            // If teacher, only get their sessions
+            if (user?.user?.role === 'TEACHER') {
+                params.teacherId = user?.user?.teacher?.id;
+            }
+
+            const response = await axios.get('/sessions', { params });
             setSessions(response.data.sessions);
             setPagination(response.data.pagination);
-        } catch (err) {
-            toast.error('Failed to fetch sessions');
+        } catch (err: any) {
+            toast.error(err.message || 'Failed to fetch sessions');
         } finally {
             setLoading(false);
         }
@@ -110,10 +117,9 @@ const SessionsManagementPage: React.FC = () => {
 
                                             {/* Attendance */}
                                             <button
-                                                onClick={() => navigate(`/admin/attendance/${session.id}`)}
+                                                onClick={() => navigate(`/attendance/${session.id}`)}
                                                 className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
-                                                title="View Attendance"
-                                            >
+                                                title="View Attendance">
                                                 <ClipboardCheck size={18} />
                                             </button>
 
@@ -123,8 +129,7 @@ const SessionsManagementPage: React.FC = () => {
                                                     setSelectedSession(session);
                                                     setModalOpen(true);
                                                 }}
-                                                className="p-2 text-primary hover:bg-primary/10 rounded-lg"
-                                            >
+                                                className="p-2 text-primary hover:bg-primary/10 rounded-lg">
                                                 <Edit2 size={18} />
                                             </button>
 
