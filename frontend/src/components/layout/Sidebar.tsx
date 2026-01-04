@@ -8,7 +8,6 @@ import {
   ClipboardCheck,
   BarChart3,
   ClipboardList,
-  UserCheck,
   ChevronsRight,
   ChevronsLeft,
 } from 'lucide-react';
@@ -34,7 +33,7 @@ function Sidebar({ mobileMenuOpen, setMobileMenuOpen }: { mobileMenuOpen: boolea
 
       // Attendance
       { title: 'Sessions', path: '/admin/sessions', icon: CalendarDays },
-      { title: 'Attendance', path: '/admin/attendance', icon: ClipboardCheck },
+      // { title: 'Attendance', path: '/admin/attendance', icon: ClipboardCheck },
 
       // Reports
       { title: 'Reports', path: '/admin/reports', icon: BarChart3 },
@@ -49,12 +48,12 @@ function Sidebar({ mobileMenuOpen, setMobileMenuOpen }: { mobileMenuOpen: boolea
     ],
 
     STUDENT: [
-      { title: 'My Attendance', path: '/student/attendance', icon: UserCheck },
+      { title: 'My Attendance', path: '/student/attendance', icon: ClipboardCheck },
     ],
 
     GUARDIAN: [
       { title: 'Dashboard', path: '/guardian/dashboard', icon: Home },
-      { title: 'Child Attendance', path: '/guardian/attendance', icon: UserCheck },
+      { title: 'Child Attendance', path: '/guardian/attendance', icon: ClipboardCheck },
       { title: 'Reports', path: '/guardian/reports', icon: BarChart3 },
     ],
   };
