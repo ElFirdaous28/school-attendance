@@ -1,18 +1,18 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { lazy, Suspense } from 'react';
-import Test from '../pages/app/Test';
 import PublicRoute from './PublicRoute';
 import AdminDashboard from '../pages/admin/Dashboard';
-import Users from '../pages/admin/Users';
 import ProtectedRoute from './ProtectedRoute';
-import Classes from '@/pages/admin/Classes';
-import Subjects from '@/pages/admin/Subjects';
 
 // Lazy load pages
 const Layout = lazy(() => import('../layout/Layout'));
 const Login = lazy(() => import('../pages/auth/Login'));
 const NotFound = lazy(() => import('../pages/app/NotFound'));
+const Users = lazy(() => import('../pages/admin/Users'));
+const Classes = lazy(() => import('../pages/admin/Classes'));
+const Subjects = lazy(() => import('../pages/admin/Subjects'));
+const Sessions = lazy(() => import('../pages/admin/Sessions'));
 
 const AppRoutes = () => {
   return (
@@ -27,13 +27,13 @@ const AppRoutes = () => {
 
           {/* routes tking layou */}
           <Route path="/" element={<Layout />}>
-            <Route path='/test' element={<Test />} />
             {/*admin routes  */}
             <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
               <Route path='/admin/dashboard' element={<AdminDashboard />} />
               <Route path='/admin/users' element={<Users />} />
               <Route path='/admin/classes' element={<Classes />} />
               <Route path='/admin/subjects' element={<Subjects />} />
+              <Route path='/admin/sessions' element={<Sessions />} />
             </Route>
           </Route>
 

@@ -35,20 +35,60 @@ export const SessionController = {
 
     async getSessions(req: Request, res: Response, next: NextFunction) {
         try {
-            const sessions = await prisma.session.findMany({
-                include: {
-                    class: true,
-                    teacher: true,
-                    attendances: true,
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+            const skip = (page - 1) * limit;
+
+            const search = (req.query.search as string)?.trim(); // search by class name
+            const status = (req.query.status as string)?.toUpperCase(); // DRAFT | VALIDATED
+            const teacherId = req.query.teacherId as string; // optional filter by teacher
+
+            const where: any = {};
+
+            if (search) {
+                where.class = {
+                    name: { contains: search, mode: 'insensitive' },
+                };
+            }
+
+            if (status && ['DRAFT', 'VALIDATED'].includes(status)) {
+                where.status = status;
+            }
+
+            if (teacherId) {
+                where.teacherId = teacherId;
+            }
+
+            const [sessions, total] = await Promise.all([
+                prisma.session.findMany({
+                    skip,
+                    take: limit,
+                    where,
+                    include: {
+                        class: true,
+                        teacher: true,
+                        attendances: true,
+                    },
+                    orderBy: { date: 'desc' },
+                }),
+                prisma.session.count({ where }),
+            ]);
+
+            res.status(200).json({
+                message: 'Sessions retrieved successfully',
+                sessions,
+                pagination: {
+                    total,
+                    page,
+                    limit,
+                    totalPages: Math.ceil(total / limit),
                 },
             });
-
-            res.status(200).json({ sessions, message: 'Sessions retrieved successfully' });
         } catch (error) {
             next(error);
         }
     },
-
+    
     async getSessionById(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
