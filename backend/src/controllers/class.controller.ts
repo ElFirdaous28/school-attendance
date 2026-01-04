@@ -16,13 +16,52 @@ export const ClassController = {
 
     async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const classes = await prisma.class.findMany();
-            res.status(200).json({ classes, message: "Classes retrieved successfully" });
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+            const skip = (page - 1) * limit;
+
+            const search = (req.query.search as string)?.trim(); // name / level
+            const status = (req.query.status as string)?.toUpperCase(); // ACTIVE | FINISHED
+
+            const where: any = {};
+
+            // Search by name or level
+            if (search) {
+                where.OR = [
+                    { name: { contains: search, mode: 'insensitive' } },
+                    { level: { contains: search, mode: 'insensitive' } },
+                ];
+            }
+
+            // Filter by status
+            if (status && ['ACTIVE', 'FINISHED'].includes(status)) {
+                where.status = status;
+            }
+
+            const [classes, total] = await Promise.all([
+                prisma.class.findMany({
+                    skip,
+                    take: limit,
+                    where,
+                    orderBy: { createdAt: 'desc' },
+                }),
+                prisma.class.count({ where }),
+            ]);
+
+            res.status(200).json({
+                message: "Classes retrieved successfully",
+                classes,
+                pagination: {
+                    total,
+                    page,
+                    limit,
+                    totalPages: Math.ceil(total / limit),
+                },
+            });
         } catch (error) {
             next(error);
         }
     },
-
     async getById(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;

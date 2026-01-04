@@ -6,6 +6,7 @@ import PublicRoute from './PublicRoute';
 import AdminDashboard from '../pages/admin/Dashboard';
 import Users from '../pages/admin/Users';
 import ProtectedRoute from './ProtectedRoute';
+import Classes from '@/pages/admin/Classes';
 
 // Lazy load pages
 const Layout = lazy(() => import('../layout/Layout'));
@@ -30,6 +31,7 @@ const AppRoutes = () => {
             <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
               <Route path='/admin/dashboard' element={<AdminDashboard />} />
               <Route path='/admin/users' element={<Users />} />
+              <Route path='/admin/classes' element={<Classes />} />
             </Route>
           </Route>
 
