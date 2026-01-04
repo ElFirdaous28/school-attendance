@@ -15,6 +15,7 @@ const Users = lazy(() => import('../pages/admin/Users'));
 const Classes = lazy(() => import('../pages/admin/Classes'));
 const Subjects = lazy(() => import('../pages/admin/Subjects'));
 const Sessions = lazy(() => import('../pages/admin/Sessions'));
+const StudentAttendance = lazy(() => import('../pages/student/Attendance'));
 
 const AppRoutes = () => {
   return (
@@ -30,7 +31,7 @@ const AppRoutes = () => {
           {/* routes tking layou */}
           <Route path="/" element={<Layout />}>
             {/*admin routes  */}
-            <Route element={<ProtectedRoute allowedRoles={['ADMIN','TEACHER']} />}>
+            <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'TEACHER']} />}>
               <Route path='/attendance/:sessionId' element={<Attendance />} />
             </Route>
             <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
@@ -46,6 +47,11 @@ const AppRoutes = () => {
             <Route element={<ProtectedRoute allowedRoles={['TEACHER']} />}>
               <Route path='/teacher/dashboard' element={<AdminDashboard />} />
               <Route path='/teacher/sessions' element={<Sessions />} />
+            </Route>
+
+            {/* student routes */}
+            <Route element={<ProtectedRoute allowedRoles={["STUDENT"]} />}>
+              <Route path='/student/attendance' element={<StudentAttendance />} />
             </Route>
           </Route>
 
