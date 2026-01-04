@@ -7,7 +7,6 @@ import {
   CalendarDays,
   ClipboardCheck,
   BarChart3,
-  ClipboardList,
   ChevronsRight,
   ChevronsLeft,
 } from 'lucide-react';
@@ -33,7 +32,7 @@ function Sidebar({ mobileMenuOpen, setMobileMenuOpen }: { mobileMenuOpen: boolea
 
       // Attendance
       { title: 'Sessions', path: '/admin/sessions', icon: CalendarDays },
-      { title: 'Attendance', path: '/admin/attendance', icon: ClipboardCheck },
+      { title: 'Attendance', path: '/attendance', icon: ClipboardCheck },
 
       // Reports
       { title: 'Reports', path: '/admin/reports', icon: BarChart3 },
@@ -44,7 +43,6 @@ function Sidebar({ mobileMenuOpen, setMobileMenuOpen }: { mobileMenuOpen: boolea
 
       // Teaching flow
       { title: 'My Sessions', path: '/teacher/sessions', icon: CalendarDays },
-      { title: 'Take Attendance', path: '/teacher/attendance', icon: ClipboardList },
     ],
 
     STUDENT: [

@@ -30,6 +30,9 @@ const AppRoutes = () => {
           {/* routes tking layou */}
           <Route path="/" element={<Layout />}>
             {/*admin routes  */}
+            <Route element={<ProtectedRoute allowedRoles={['ADMIN','TEACHER']} />}>
+              <Route path='/attendance/:sessionId' element={<Attendance />} />
+            </Route>
             <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
               <Route path='/admin/dashboard' element={<AdminDashboard />} />
               <Route path='/admin/users' element={<Users />} />
@@ -37,7 +40,12 @@ const AppRoutes = () => {
               <Route path='/admin/subjects' element={<Subjects />} />
               <Route path='/admin/sessions' element={<Sessions />} />
               <Route path='/admin/class-enrollments/:classId' element={<ClassEnrollments />} />
-              <Route path='/admin/attendance/:sessionId' element={<Attendance />} />
+            </Route>
+
+            {/* teacher routes */}
+            <Route element={<ProtectedRoute allowedRoles={['TEACHER']} />}>
+              <Route path='/teacher/dashboard' element={<AdminDashboard />} />
+              <Route path='/teacher/sessions' element={<Sessions />} />
             </Route>
           </Route>
 
