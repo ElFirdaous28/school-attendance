@@ -46,6 +46,27 @@ export const GuardianStudentController = {
         }
     },
 
+    // function to make guardian primary for a student
+    async setPrimaryGuardian(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { guardianId, studentId } = req.params;
+            // first set all guardians for the student to isPrimary = false
+            await prisma.guardianStudent.updateMany({
+                where: { studentId },
+                data: { isPrimary: false },
+            });
+            // then set the specified guardian to isPrimary = true
+            const updatedGuardianStudent = await prisma.guardianStudent.updateMany({
+                where: { guardianId, studentId },
+                data: { isPrimary: true },
+            });
+            res.status(200).json({ updatedGuardianStudent, message: `Guardian ${guardianId} set as primary for student ${studentId}` });
+        }
+        catch (error) {
+            next(error);
+        }
+    },
+
     // get guardians for a specific student
     async getGuardiansForStudent(req: Request, res: Response, next: NextFunction) {
         try {

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Edit2, Trash2, Plus, User as UserIcon, Mail, Calendar, Phone, BookOpen, AlertCircle } from 'lucide-react';
+import { Search, Edit2, Trash2, Plus, User as UserIcon, Mail, Calendar, Phone, BookOpen, AlertCircle, Users, Heart } from 'lucide-react';
 import { useAxios } from '../../hooks/useAxios';
 import type { User, Teacher, Student, Guardian } from '@school/shared';
 import { ConfirmDialog } from '@/components/app/ConfirmDialog';
 import { toast } from 'react-toastify';
 import UserModal from '@/components/modals/UserModal';
+import GuardianChildrenModal from '@/components/modals/GuardianChildrenModal';
+import StudentGuardiansModal from '@/components/modals/StudentGuardiansModal';
 
 type UserWithRelations = User & {
     teacher?: Teacher | null;
@@ -36,6 +38,8 @@ const UsersManagementPage: React.FC = () => {
 
     const [selectedUser, setSelectedUser] = useState<UserWithRelations | null>(null);
     const [modalOpen, setModalOpen] = useState(false);
+    const [childrenModalOpen, setChildrenModalOpen] = useState(false);
+    const [guardiansModalOpen, setGuardiansModalOpen] = useState(false);
 
     // Debounce search input
     useEffect(() => {
@@ -295,12 +299,32 @@ const UsersManagementPage: React.FC = () => {
                                                 {/* Actions */}
                                                 <td className="px-6 py-4 text-right">
                                                     <div className="flex items-center justify-end gap-2">
+                                                        {/* Logic for Guardian Students */}
+                                                        {user.role === 'GUARDIAN' && (
+                                                            <button
+                                                                onClick={() => { setSelectedUser(user); setChildrenModalOpen(true); }}
+                                                                className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"
+                                                                title="Manage Children">
+                                                                <Users size={18} />
+                                                            </button>
+                                                        )}
+                                                        {/* Logic for Student Guardians */}
+                                                        {user.role === 'STUDENT' && (
+                                                            <button
+                                                                onClick={() => { setSelectedUser(user); setGuardiansModalOpen(true); }}
+                                                                className="p-2 text-secondary hover:bg-secondary/10 rounded-lg transition-colors"
+                                                                title="Manage Guardians">
+                                                                <Heart size={18} />
+                                                            </button>
+                                                        )}
+
                                                         <button
                                                             onClick={() => { setSelectedUser(user); setModalOpen(true); }}
                                                             className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"
                                                             title="Edit user">
                                                             <Edit2 size={18} />
                                                         </button>
+
                                                         <ConfirmDialog
                                                             trigger={
                                                                 <button
@@ -386,6 +410,26 @@ const UsersManagementPage: React.FC = () => {
                 user={selectedUser}
                 onSave={handleSaveUser}
             />
+
+            {/* Guardian Specific Modal */}
+            <GuardianChildrenModal
+                isOpen={childrenModalOpen}
+                onClose={() => setChildrenModalOpen(false)}
+                guardianUser={selectedUser}
+            />
+
+            {/* Student Specific Modal (Structure is similar to Guardian one) */}
+            <StudentGuardiansModal
+                isOpen={guardiansModalOpen}
+                onClose={() => setGuardiansModalOpen(false)}
+                studentUser={selectedUser}
+                onEditGuardian={(guardian) => {
+                    setGuardiansModalOpen(false);
+                    setSelectedUser(guardian.user); // guardian.user is the User object
+                    setModalOpen(true);
+                }}
+            />
+
         </div>
     );
 };

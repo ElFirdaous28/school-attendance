@@ -14,5 +14,6 @@ router.get("/:id", GuardianStudentController.getById);
 router.delete("/:id", GuardianStudentController.delete);
 router.get("/student/:studentId", GuardianStudentController.getGuardiansForStudent);
 router.get("/guardian/:guardianId", GuardianStudentController.getStudentsForGuardian);
+router.put("/set-primary/:guardianId/:studentId", GuardianStudentController.setPrimaryGuardian);
 
 export default router;
