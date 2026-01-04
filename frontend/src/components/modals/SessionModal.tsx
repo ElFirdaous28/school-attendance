@@ -14,7 +14,19 @@ const sessionFormSchema = z.object({
     startTime: z.string().min(1, "Start time is required"),
     endTime: z.string().min(1, "End time is required"),
     status: z.enum(["DRAFT", "VALIDATED"]).optional(),
+}).superRefine((data, ctx) => {
+    const start = new Date(`1970-01-01T${data.startTime}:00`);
+    const end = new Date(`1970-01-01T${data.endTime}:00`);
+
+    if (end <= start) {
+        ctx.addIssue({
+            path: ['endTime'],
+            message: 'End time must be after start time',
+            code: z.ZodIssueCode.custom,
+        });
+    }
 });
+
 
 type SessionFormData = z.infer<typeof sessionFormSchema>;
 
@@ -49,7 +61,7 @@ const SessionModal: React.FC<{ isOpen: boolean; onClose: () => void; sessionData
 
     // Map data to react-select format: { value: 'id', label: 'Name' }
     const classOptions = classes.map((c: any) => ({ value: c.id, label: c.name }));
-    const teacherOptions = teachers.map((t: any) => ({ value: t.id, label: `${t.firstName} ${t.lastName}` }));
+    const teacherOptions = teachers.map((t: any) => ({ value: t.teacher.id, label: `${t.firstName} ${t.lastName}` }));
 
     const onSubmit = async (data: SessionFormData) => {
         try {
@@ -148,7 +160,16 @@ const SessionModal: React.FC<{ isOpen: boolean; onClose: () => void; sessionData
                         </div>
                         <div>
                             <label className="block text-sm font-medium mb-1">End Time</label>
-                            <input type="time" {...register('endTime')} className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-primary" />
+                            <input
+                                type="time"
+                                {...register('endTime')}
+                                className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-primary"
+                            />
+                            {errors.endTime && (
+                                <p className="text-red-500 text-xs mt-1">
+                                    {errors.endTime.message}
+                                </p>
+                            )}
                         </div>
                     </div>
 
