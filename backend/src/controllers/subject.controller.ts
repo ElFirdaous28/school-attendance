@@ -11,11 +11,43 @@ export const SubjectController = {
             next(error);
         }
     },
-
     async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const subjects = await prisma.subject.findMany();
-            res.status(200).json({ subjects, message: "Subjects retrieved successfully" });
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+            const skip = (page - 1) * limit;
+
+            const search = (req.query.search as string)?.trim(); // search by name or code
+
+            const where: any = {};
+
+            if (search) {
+                where.OR = [
+                    { name: { contains: search, mode: 'insensitive' } },
+                    { code: { contains: search, mode: 'insensitive' } },
+                ];
+            }
+
+            const [subjects, total] = await Promise.all([
+                prisma.subject.findMany({
+                    skip,
+                    take: limit,
+                    where,
+                    orderBy: { createdAt: 'desc' },
+                }),
+                prisma.subject.count({ where }),
+            ]);
+
+            res.status(200).json({
+                message: "Subjects retrieved successfully",
+                subjects,
+                pagination: {
+                    total,
+                    page,
+                    limit,
+                    totalPages: Math.ceil(total / limit),
+                },
+            });
         } catch (error) {
             next(error);
         }
